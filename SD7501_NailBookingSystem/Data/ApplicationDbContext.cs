@@ -19,5 +19,6 @@ namespace SD7501_NailBookingSystem.Data
                 new Booking { Id = 3, Name = "Kelly", BookingOrder = 3 }
                 );
         }
+        public DbSet<Service> Services { get; set; }
     }
 }
