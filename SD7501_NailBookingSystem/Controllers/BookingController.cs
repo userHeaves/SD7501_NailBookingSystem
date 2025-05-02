@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SD7501_NailBookingSystem.Data;
+using SD7501_NailBookingSystem.Models;
 
 namespace SD7501_NailBookingSystem.Controllers
 {
