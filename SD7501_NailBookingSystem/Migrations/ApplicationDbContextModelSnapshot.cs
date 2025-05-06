@@ -21,6 +21,46 @@ namespace SD7501_NailBookingSystem.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SD7501_NailBookingSystem.Models.AddOn", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AddOns");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Cost = 8m,
+                            Type = "French Tip"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Cost = 8m,
+                            Type = "Nail Art"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Cost = 8m,
+                            Type = "Sticker and Gems"
+                        });
+                });
+
             modelBuilder.Entity("SD7501_NailBookingSystem.Models.Booking", b =>
                 {
                     b.Property<int>("Id")
@@ -80,6 +120,38 @@ namespace SD7501_NailBookingSystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Services");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Cost = 40m,
+                            Type = "Manicure Gel"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Cost = 40m,
+                            Type = "Pedicure Gel"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Cost = 55m,
+                            Type = "SNS"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Cost = 60m,
+                            Type = "Acrylic"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Cost = 50m,
+                            Type = "BIAB"
+                        });
                 });
 #pragma warning restore 612, 618
         }
