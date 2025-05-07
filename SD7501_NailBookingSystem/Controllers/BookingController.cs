@@ -34,16 +34,18 @@ namespace SD7501_NailBookingSystem.Controllers
                 ModelState.AddModelError("Name", "This Display Order cannot exactly match with the name");
 
             }
+
+            //_Notification
             if (ModelState.IsValid)
             {
                 _db.Bookings.Add(bookingobj);
                 _db.SaveChanges();
-                TempData["success"] = "Catergory created successfully";
+                TempData["success"] = "Booking created successfully";
                 return RedirectToAction("Index");
             }
             if (!ModelState.IsValid)
             {
-                TempData["error"] = "Creation failed";
+                TempData["error"] = "Booking creation failed";
             }
             return View();
         }
@@ -73,7 +75,13 @@ namespace SD7501_NailBookingSystem.Controllers
             {
                 _db.Bookings.Update(bookingobj);
                 _db.SaveChanges();
+                TempData["success"] = "Booking updated successfully";
                 return RedirectToAction("Index");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                TempData["error"] = "Edit failed";
             }
             return View();
         }
@@ -107,6 +115,7 @@ namespace SD7501_NailBookingSystem.Controllers
             }
             _db.Bookings.Remove(bookingobj);
             _db.SaveChanges();
+            TempData["success"] = "Booking deleted successful";
             return RedirectToAction("Index");
         }
 
