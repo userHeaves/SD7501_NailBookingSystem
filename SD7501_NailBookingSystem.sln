@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD7501_NailBookingSystem", "SD7501_NailBookingSystem\SD7501_NailBookingSystem.csproj", "{C201575D-CD93-4E10-9F62-E33C23388035}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD7501_NailBookingSystem.DataAccess", "SD7501_NailBookingSystem.DataAccess\SD7501_NailBookingSystem.DataAccess.csproj", "{DE888510-4ECF-4A16-A4DB-AF70354B6310}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD7501_NailBookingSystem.Models", "SD7501_NailBookingSystem.Models\SD7501_NailBookingSystem.Models.csproj", "{FA9E8779-760E-410A-B0B3-ACCA9FD4C2C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SD7501_NailBookingSystem.Utilities", "SD7501_NailBookingSystem.Utilities\SD7501_NailBookingSystem.Utilities.csproj", "{D1251ECD-ADB2-5E80-B6FF-16878EB0AE4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{C201575D-CD93-4E10-9F62-E33C23388035}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C201575D-CD93-4E10-9F62-E33C23388035}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C201575D-CD93-4E10-9F62-E33C23388035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE888510-4ECF-4A16-A4DB-AF70354B6310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE888510-4ECF-4A16-A4DB-AF70354B6310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE888510-4ECF-4A16-A4DB-AF70354B6310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE888510-4ECF-4A16-A4DB-AF70354B6310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA9E8779-760E-410A-B0B3-ACCA9FD4C2C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA9E8779-760E-410A-B0B3-ACCA9FD4C2C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA9E8779-760E-410A-B0B3-ACCA9FD4C2C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA9E8779-760E-410A-B0B3-ACCA9FD4C2C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1251ECD-ADB2-5E80-B6FF-16878EB0AE4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1251ECD-ADB2-5E80-B6FF-16878EB0AE4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1251ECD-ADB2-5E80-B6FF-16878EB0AE4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1251ECD-ADB2-5E80-B6FF-16878EB0AE4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
