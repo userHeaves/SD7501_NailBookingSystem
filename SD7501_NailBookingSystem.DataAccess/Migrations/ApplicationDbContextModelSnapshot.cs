@@ -7,7 +7,7 @@ using SD7501_NailBookingSystem.Data;
 
 #nullable disable
 
-namespace SD7501_NailBookingSystem.Migrations
+namespace SD7501_NailBookingSystem.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

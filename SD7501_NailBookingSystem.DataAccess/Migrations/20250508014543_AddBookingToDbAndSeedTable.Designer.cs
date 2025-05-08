@@ -8,11 +8,11 @@ using SD7501_NailBookingSystem.Data;
 
 #nullable disable
 
-namespace SD7501_NailBookingSystem.Migrations
+namespace SD7501_NailBookingSystem.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250506000721_AddServiceTableToDb")]
-    partial class AddServiceTableToDb
+    [Migration("20250508014543_AddBookingToDbAndSeedTable")]
+    partial class AddBookingToDbAndSeedTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

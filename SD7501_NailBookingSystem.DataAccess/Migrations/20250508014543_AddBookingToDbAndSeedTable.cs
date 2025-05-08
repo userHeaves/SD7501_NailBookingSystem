@@ -4,10 +4,10 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace SD7501_NailBookingSystem.Migrations
+namespace SD7501_NailBookingSystem.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddServiceTableToDb : Migration
+    public partial class AddBookingToDbAndSeedTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +24,20 @@ namespace SD7501_NailBookingSystem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AddOns", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    BookingOrder = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,6 +65,16 @@ namespace SD7501_NailBookingSystem.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Bookings",
+                columns: new[] { "Id", "BookingOrder", "Name" },
+                values: new object[,]
+                {
+                    { 1, 1, "Alice" },
+                    { 2, 2, "Jasmine" },
+                    { 3, 3, "Kelly" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Services",
                 columns: new[] { "Id", "Cost", "Type" },
                 values: new object[,]
@@ -68,6 +92,9 @@ namespace SD7501_NailBookingSystem.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AddOns");
+
+            migrationBuilder.DropTable(
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "Services");

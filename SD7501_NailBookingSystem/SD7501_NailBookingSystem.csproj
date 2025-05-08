@@ -16,4 +16,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SD7501_NailBookingSystem.DataAccess\SD7501_NailBookingSystem.DataAccess.csproj" />
+    <ProjectReference Include="..\SD7501_NailBookingSystem.Models\SD7501_NailBookingSystem.Models.csproj" />
+  </ItemGroup>
+
 </Project>
