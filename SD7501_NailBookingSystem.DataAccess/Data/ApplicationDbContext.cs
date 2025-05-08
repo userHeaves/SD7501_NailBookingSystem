@@ -15,6 +15,9 @@ namespace SD7501_NailBookingSystem.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Not sure if we need this:
+            //base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Booking>().HasData(
                 new Booking { Id = 1, Name = "Alice", BookingOrder = 1 },
                 new Booking { Id = 2, Name = "Jasmine", BookingOrder = 2 },

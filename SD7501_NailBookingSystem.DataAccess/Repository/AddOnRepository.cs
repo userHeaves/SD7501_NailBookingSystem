@@ -1,5 +1,6 @@
 ﻿using SD7501_NailBookingSystem.Data;
 using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
+using SD7501_NailBookingSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,26 +9,22 @@ using System.Threading.Tasks;
 
 namespace SD7501_NailBookingSystem.DataAccess.Repository
 {
-    public class UnitOfWork : IUnityOfWork
+    public class AddOnRepository : Repository<AddOn>, IAddOnRepository
     {
         private ApplicationDbContext _db;
-        public IBookingRepository Booking { get; private set; }
-        public IServiceRepository Service { get; private set; }
-        public IAddOnRepository AddOn { get; private set; }
 
-        public UnitOfWork(ApplicationDbContext db)
+        public AddOnRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
-            Booking = new BookingRepository(_db);
-            Service = new ServiceRepository(_db);
-            AddOn = new AddOnRepository(_db);
-
         }
-
         public void Save()
         {
             _db.SaveChanges();
         }
 
+        public void Update(AddOn obj)
+        {
+            _db.AddOns.Update(obj);
+        }
     }
 }
