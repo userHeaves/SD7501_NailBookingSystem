@@ -7,17 +7,17 @@ namespace SD7501_NailBookingSystem.Controllers
 {
     public class BookingController : Controller
     {
-        private readonly IBookingRepository _bookingRepo;
+        private readonly IUnityOfWork _unitOfWork;
 
         //Main View
-        public BookingController(IBookingRepository db)
+        public BookingController(IUnityOfWork unityOfWork)
         {
-            _bookingRepo = db;
+            _unitOfWork = unityOfWork;
 
         }
         public IActionResult Index()
         {
-            var objBookingList = _bookingRepo.GetAll();
+            var objBookingList = _unitOfWork.Booking.GetAll().ToList();
             return View(objBookingList);
         }
 
@@ -38,8 +38,8 @@ namespace SD7501_NailBookingSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                _bookingRepo.Add(bookingobj);
-                _bookingRepo.Save();
+                _unitOfWork.Booking.Add(bookingobj);
+                _unitOfWork.Save();
                 TempData["success"] = "Booking created successfully";
                 return RedirectToAction("Index");
             }
@@ -59,7 +59,7 @@ namespace SD7501_NailBookingSystem.Controllers
             }
 
             //Find the id
-            Booking? bookingFromDB = _bookingRepo.Get(u => u.Id == id);
+            Booking? bookingFromDB = _unitOfWork.Booking.Get(u => u.Id == id);
 
             if (bookingFromDB == null)
             {
@@ -73,8 +73,8 @@ namespace SD7501_NailBookingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _bookingRepo.Update(bookingobj);
-                _bookingRepo.Save();
+                _unitOfWork.Booking.Update(bookingobj);
+                _unitOfWork.Save();
                 TempData["success"] = "Booking updated successfully";
                 return RedirectToAction("Index");
             }
@@ -95,7 +95,7 @@ namespace SD7501_NailBookingSystem.Controllers
             }
 
             //Find the id
-            Booking? bookingFromDB = _bookingRepo.Get(u => u.Id == id);
+            Booking? bookingFromDB = _unitOfWork.Booking.Get(u => u.Id == id);
 
             if (bookingFromDB == null)
             {
@@ -107,14 +107,14 @@ namespace SD7501_NailBookingSystem.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Booking? bookingobj = _bookingRepo.Get(u => u.Id == id);
+            Booking? bookingobj = _unitOfWork.Booking.Get(u => u.Id == id);
             if (bookingobj == null)
             {
                 return NotFound();
 
             }
-            _bookingRepo.Remove(bookingobj);
-            _bookingRepo.Save();
+            _unitOfWork.Booking.Remove(bookingobj);
+            _unitOfWork.Save();
             TempData["success"] = "Booking deleted successful";
             return RedirectToAction("Index");
         }
