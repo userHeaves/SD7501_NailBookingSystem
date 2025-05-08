@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SD7501_NailBookingSystem.Data;
+using SD7501_NailBookingSystem.DataAccess.Repository;
+using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,8 @@ builder.Services.AddControllersWithViews();
 // Pass the connection string from appsettings.json to DbContext using dependency injection (DI)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//Adding scope - for DI
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 
 var app = builder.Build();
