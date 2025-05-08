@@ -3,8 +3,9 @@ using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using SD7501_NailBookingSystem.Data;
 using SD7501_NailBookingSystem.Models;
 
-namespace SD7501_NailBookingSystem.Controllers
+namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class BookingController : Controller
     {
         private readonly IUnityOfWork _unitOfWork;
