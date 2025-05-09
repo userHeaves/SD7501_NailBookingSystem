@@ -1,5 +1,74 @@
 ﻿@model List<Service>
-<div class="container">
+<div class=" card shadow border-0 mt-4">
+    <div class=" card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2"> Services </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-6">
+            </div>
+
+            <div class="col-6">
+                <a asp-controller="Booking" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Create New Service
+                </a>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thread>
+                <tr>
+                    <th class="text-body-emphasis">
+                        Service Type
+                    </th>
+                    <th class="text-body-emphasis">
+                        Cost
+                    </th>
+                    <th></th>
+                </tr>
+            </thread>
+            <tbody>
+                @foreach (var obj in Model.OrderBy(u => u.Id))
+                {
+                    <tr>
+                        <td class="text-body"> @obj.Type </td>
+                        <td class="text-body"> @obj.Cost
+                            <div class="w-10 btn-group" role="group">
+                                <a asp-controller="Service" asp-action="Select" class="btn btn-primary mx-2">
+                                    <i class="bi bi-plus-square"></i>
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group me-2 w-25" role="group" aria-label="First group">
+                                    <a asp-controller="Booking" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-primary btn-sm text-light">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                </div>
+                                <div class="btn-group w-25" role="group" aria-label="Second group">
+                                    <a asp-controller="Booking" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger btn-sm text-light">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+@* -----------------------------Old layout------------------------------------------- *@
+@* <div class="container">
 	<div class="row pt-4">
 	<div class="col-6">
 		<h1 class="text-primary"> Services </h1>
@@ -33,3 +102,6 @@
 	</tbody>
 </table>
 </div>
+
+
+ *@
