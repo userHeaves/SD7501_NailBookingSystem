@@ -158,7 +158,7 @@ namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
 
         #endregion
         //-------------------------------API END POINT-----------------------------------------------------------------//
-        public class AddOnController : Controller
+        /*public class AddOnController : Controller
         {
             private readonly IUnityOfWork _unitOfWork;
             public AddOnController(IUnityOfWork unityOfWork)
@@ -172,7 +172,7 @@ namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
         {
             List<AddOn> objAddOnList = _unitOfWork.AddOn.GetAll().ToList();
             return View();
-        }
+        }*/
     }
 
 }

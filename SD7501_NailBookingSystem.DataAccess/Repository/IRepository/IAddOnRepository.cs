@@ -1,4 +1,4 @@
-﻿using SD7501_NailBookingSystem.Models;
+﻿/*using SD7501_NailBookingSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,3 +12,4 @@ namespace SD7501_NailBookingSystem.DataAccess.Repository.IRepository
         void Update(AddOn obj);
     }
 }
+*/

@@ -9,14 +9,7 @@ function loadDataTable() {
         "ajax": { url: '/admin/service/getall' },
         "columns": [
             { data: 'type', "width": "25%" },
-            {
-                data:'cost',
-                "render": function (data) {
-                    return `${data} <div class="w-10 btn-group" role="group">
-                    <a href="/admin/service/select" asp-action="Select" class="btn btn-primary mx-2"><i class="bi bi-plus-square"></i></a></div>`
-                },
-                "width": "10%"
-            },
+            { data:'cost', "width": "10%" },
             { data: 'booking.name', "width": "25%" },
             {
                 data: 'id',

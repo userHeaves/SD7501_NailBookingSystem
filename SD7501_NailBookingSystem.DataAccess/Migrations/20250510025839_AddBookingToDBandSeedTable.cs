@@ -12,7 +12,7 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
+            /*migrationBuilder.CreateTable(
                 name: "AddOns",
                 columns: table => new
                 {
@@ -24,7 +24,7 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AddOns", x => x.Id);
-                });
+                });*/
 
             migrationBuilder.CreateTable(
                 name: "Bookings",
@@ -63,7 +63,7 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
+            /*migrationBuilder.InsertData(
                 table: "AddOns",
                 columns: new[] { "Id", "Cost", "Type" },
                 values: new object[,]
@@ -71,7 +71,7 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                     { 1, 8m, "French Tip" },
                     { 2, 8m, "Nail Art" },
                     { 3, 8m, "Sticker and Gems" }
-                });
+                });*/
 
             migrationBuilder.InsertData(
                 table: "Bookings",
@@ -104,8 +104,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AddOns");
+            /*migrationBuilder.DropTable(
+                name: "AddOns");*/
 
             migrationBuilder.DropTable(
                 name: "Services");

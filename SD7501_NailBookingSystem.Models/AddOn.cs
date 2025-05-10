@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*using System.ComponentModel.DataAnnotations;
 
 namespace SD7501_NailBookingSystem.Models
 {
@@ -11,3 +11,4 @@ namespace SD7501_NailBookingSystem.Models
         public decimal Cost { get; set; }
     }
 }
+*/

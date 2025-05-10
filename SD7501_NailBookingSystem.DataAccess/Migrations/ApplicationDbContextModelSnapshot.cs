@@ -229,7 +229,7 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SD7501_NailBookingSystem.Models.AddOn", b =>
+            /*modelBuilder.Entity("SD7501_NailBookingSystem.Models.AddOn", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -267,7 +267,7 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Cost = 8m,
                             Type = "Sticker and Gems"
                         });
-                });
+                });*/
 
             modelBuilder.Entity("SD7501_NailBookingSystem.Models.Booking", b =>
                 {

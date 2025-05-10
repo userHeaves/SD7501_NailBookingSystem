@@ -13,14 +13,14 @@ namespace SD7501_NailBookingSystem.DataAccess.Repository
         private ApplicationDbContext _db;
         public IBookingRepository Booking { get; private set; }
         public IServiceRepository Service { get; private set; }
-        public IAddOnRepository AddOn { get; private set; }
+        //public IAddOnRepository AddOn { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             Booking = new BookingRepository(_db);
             Service = new ServiceRepository(_db);
-            AddOn = new AddOnRepository(_db);
+            //AddOn = new AddOnRepository(_db);
 
         }
 

@@ -1,4 +1,4 @@
-﻿using SD7501_NailBookingSystem.Data;
+﻿/*using SD7501_NailBookingSystem.Data;
 using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using SD7501_NailBookingSystem.Models;
 using System;
@@ -28,3 +28,4 @@ namespace SD7501_NailBookingSystem.DataAccess.Repository
         }
     }
 }
+*/

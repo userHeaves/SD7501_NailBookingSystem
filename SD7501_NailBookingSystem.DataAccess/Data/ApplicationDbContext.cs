@@ -13,7 +13,7 @@ namespace SD7501_NailBookingSystem.Data
         }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Service> Services { get; set; }
-        public DbSet<AddOn> AddOns { get; set; }
+        //public DbSet<AddOn> AddOns { get; set; }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
@@ -34,11 +34,11 @@ namespace SD7501_NailBookingSystem.Data
                 new Service {Id = 4, Type = "Acrylic", Cost = 60,Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.", BookingId = 2, ImageUrl = "" },
                 new Service {Id = 5, Type = "BIAB", Cost = 50,Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.", BookingId = 3, ImageUrl = "" }
                 );
-            modelBuilder.Entity<AddOn>().HasData(
+            /*modelBuilder.Entity<AddOn>().HasData(
                 new AddOn { Id = 1, Type = "French Tip", Cost = 8},
                 new AddOn { Id = 2, Type = "Nail Art", Cost = 8},
                 new AddOn { Id = 3, Type = "Sticker and Gems", Cost = 8}
-                );
+                );*/
         }
     }
 }

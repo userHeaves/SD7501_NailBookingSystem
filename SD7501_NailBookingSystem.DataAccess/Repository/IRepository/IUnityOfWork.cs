@@ -10,7 +10,7 @@ namespace SD7501_NailBookingSystem.DataAccess.Repository.IRepository
     {
         IBookingRepository Booking { get; }
         IServiceRepository Service { get; }
-        IAddOnRepository AddOn { get; }
+        //IAddOnRepository AddOn { get; }
         void Save();
 
     }
