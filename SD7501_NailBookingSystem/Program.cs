@@ -7,19 +7,30 @@ using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using SD7501_NailBookingSystem.Utilities;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using SD7501_NailBookingSystem.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Google credentials
+builder.Services.Configure<GoogleOAuthSettings>(builder.Configuration.GetSection("Authentication:Google"));
+
+// Configure Google Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
 .AddCookie()
-.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+.AddGoogle(options =>
 {
-    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
-    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+    // Access credentials from configuration (user secrets)
+    var googleOptions = builder.Configuration.GetSection("Authentication:Google").Get<GoogleOAuthSettings>();
+
+    options.ClientId = googleOptions.ClientId;
+    options.ClientSecret = googleOptions.ClientSecret;
+
+    // Optionally, configure callback path (if needed)
+    options.CallbackPath = "/signin-google";
 });
 
 // Add services to the container.
