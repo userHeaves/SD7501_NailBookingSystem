@@ -24,7 +24,19 @@ namespace SD7501_NailBookingSystem.DataAccess.Repository
 
         public void Update(Service obj)
         {
-            _db.Services.Update(obj);
+            //_db.Services.Update(obj);
+            var objFromDb = _db.Services.FirstOrDefault(u => u.Id == obj.Id);
+            if (objFromDb != null)
+            {
+                objFromDb.Type = obj.Type;
+                objFromDb.Cost = obj.Cost;
+                objFromDb.Description = obj.Description;
+                objFromDb.BookingId = obj.BookingId;
+                if (obj.ImageUrl != null)
+                {
+                    objFromDb.ImageUrl = obj.ImageUrl;
+                }
+            }
         }
     }
 }

@@ -1,0 +1,109 @@
+﻿@model SD7501_NailBookingSystem.Models.ViewModels.ServiceVM
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+    <div class="row">
+        <div class=" col text-center">
+            <h2 class="text-white py-2">@(Model.Service.Id != 0 ? "Update" : "Create") Service</h2>
+        </div>
+    </div>
+</div>
+<div class="card-body p-4">
+        <form method="post" class="row" enctype="multipart/form-data">
+            <input asp-for="Service.Id" hidden/>
+            <input asp-for="Service.ImageUrl" hidden />
+            <div class="row">
+                <div class="col-10">
+                    <div class="border p-3">
+                        @*<div asp-validation-summary="All"></div>*@
+                        <div class="mb-3 row p-1">
+                            <label asp-for="Service.Type" class="ms-2"> </label>
+                            <input asp-for="Service.Type" class="form-control border-0 shadow" />
+                            <span asp-validation-for="Service.Type" class="bg-danger text-light"></span>
+
+                        </div>
+
+                        <div class="mb-3 row p-1">
+                            <label asp-for="Service.Description" class="ms-2"> </label>
+                            <textarea asp-for="Service.Description" class="form-control border-0 shadow"></textarea> 
+                        </div>
+
+                        <div class="mb-3 row p-1">
+                            <label asp-for="Service.Cost" class="ms-2"> </label>
+                            <input asp-for="Service.Cost" class="form-control border-0 shadow" />
+                            <span asp-validation-for="Service.Cost" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3 row p-1">
+                            <label asp-for="Service.BookingId" class="ms-2"> </label>
+                            <select asp-for="Service.BookingId" asp-items="@Model.BookingList" class="form-control border-0 shadow">
+                                <option disabled selected>--Select Booking</option>
+                            </select>
+                            <span asp-validation-for="Service.BookingId" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="mb-3 row p-1">
+                            <label asp-for="Service.ImageUrl" class="ms-2"> </label>
+                            @* <input asp-for="Service.ImageUrl" class="form-control border-0 shadow" /> *@
+                            <input type="file" name="file" class="form-control border-0 shadow" />
+                            <span asp-validation-for="Service.ImageUrl" class="text-danger"></span>
+                        </div>
+
+                        <div class="row pt-2">
+                            <div class="col-6 col-md-3">
+                                @if (Model.Service.Id != 0)
+                                {
+                                    <button type="submit" class="btn btn-primary form-control">Update</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-primary form-control">Create</button>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-md-3">
+                            <a asp-controller="Service" asp-action="Index" class="btn btn-secondary border form-control">
+                                Back to List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-2">
+                    <img src="@Model.Service.ImageUrl" width="100%"
+                    style="border-radius:5px;border:1px solid #bbb9b9"/>
+                </div>
+            </div>
+        </form>
+</div>
+</div>
+
+@section Scripts {
+    @* TinyMCE script *@
+    <script>
+        tinymce.init({
+          selector: 'textarea',
+          plugins: [
+            // Core editing features
+            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+            // Your account includes a free trial of TinyMCE premium features
+            // Try the most popular premium features until May 22, 2025:
+            'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
+          ],
+          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+          tinycomments_mode: 'embedded',
+          tinycomments_author: 'Author name',
+          mergetags_list: [
+            { value: 'First.Name', title: 'First Name' },
+            { value: 'Email', title: 'Email' },
+          ],
+          ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+        });
+    </script>
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

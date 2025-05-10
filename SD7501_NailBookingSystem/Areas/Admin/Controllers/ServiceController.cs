@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
 using SD7501_NailBookingSystem.Data;
+using SD7501_NailBookingSystem.DataAccess.Repository;
 using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using SD7501_NailBookingSystem.Models;
+using SD7501_NailBookingSystem.Models.ViewModels;
 
 namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
 {
@@ -10,61 +13,100 @@ namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
     public class ServiceController : Controller
     {
         private readonly IUnityOfWork _unitOfWork;
-        public ServiceController(IUnityOfWork unityOfWork)
-        {
-            _unitOfWork = unityOfWork;
-        }
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
+        public ServiceController(IUnityOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        {
+            _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
+
+        }
         public IActionResult Index()
         {
-            List<Service> objServiceList = _unitOfWork.Service.GetAll().ToList();
+            var objServiceList = _unitOfWork.Service.GetAll(includeProperties:"Booking").ToList();
             return View(objServiceList);
         }
 
-        //Create
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Create(Service serviceobj)
-        {
-            if (serviceobj.Type == serviceobj.Cost.ToString())
+            ServiceVM serviceVM = new()
             {
-                ModelState.AddModelError("Name", "This Display Order cannot exactly match with the name");
+                BookingList = _unitOfWork.Booking.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                Service = new Service()
+            };
 
+            if (id == null || id == 0)
+            {
+                // Create
+                return View(serviceVM);
             }
+            else
+            {
+                // Update
+                serviceVM.Service = _unitOfWork.Service.Get(u => u.Id == id);
+                return View(serviceVM);
+            }
+        }
 
+        [HttpPost]
+        public IActionResult Upsert(ServiceVM serviceVM, IFormFile? file)
+        {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Service.Add(serviceobj);
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); // Generates a unique file name
+                    string servicePath = Path.Combine(wwwRootPath, @"images\service");
+
+                    if (!string.IsNullOrEmpty(serviceVM.Service.ImageUrl))
+                    {
+                        //delete the old image by getting the path of that image
+                        var oldImagePath = Path.Combine(wwwRootPath, serviceVM.Service.ImageUrl.Trim('\\'));
+
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+
+                    }
+
+                    using (var fileStream = new FileStream(Path.Combine(servicePath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    serviceVM.Service.ImageUrl = @"\images\service\" + fileName;
+                }
+
+                if (serviceVM.Service.Id == 0)
+                {
+                    _unitOfWork.Service.Add(serviceVM.Service);
+                }
+                else
+                {
+                    _unitOfWork.Service.Update(serviceVM.Service);
+
+                }
                 _unitOfWork.Save();
                 TempData["success"] = "Service created successfully";
                 return RedirectToAction("Index");
             }
-            if (!ModelState.IsValid)
+            else
             {
-                TempData["error"] = "Service creation failed";
-            }
-            return View();
-        }
+                serviceVM.BookingList = _unitOfWork.Booking.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
 
-        //Edit
-        public IActionResult Edit(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
+                return View(serviceVM);
             }
 
-            //Find the id
-            Service? serviceFromDB = _unitOfWork.Service.Get(u => u.Id == id);
-
-            if (serviceFromDB == null)
-            {
-                return NotFound();
-            }
-            return View(serviceFromDB);
         }
 
         [HttpPost]
@@ -74,50 +116,45 @@ namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
             {
                 _unitOfWork.Service.Update(serviceobj);
                 _unitOfWork.Save();
-                TempData["success"] = "Service updated successfully";
+                TempData["success"] = "Service update successfully";
                 return RedirectToAction("Index");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                TempData["error"] = "Edit failed";
             }
             return View();
         }
 
-        //Delete
+        //-------------------------------API END POINT-----------------------------------------------------------------//
+        #region API calls
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Service> objServiceList = _unitOfWork.Service.GetAll(includeProperties: "Booking").ToList();
+            return Json(new { data = objServiceList });
+        }
+
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (id == null || id == 0)
+            var serviceToBeDeleted = _unitOfWork.Service.Get(u => u.Id == id);
+            if (serviceToBeDeleted == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Error while deleting" });
             }
 
-            //Find the id
-            Service? serviceFromDB = _unitOfWork.Service.Get(u => u.Id == id);
+            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, serviceToBeDeleted.ImageUrl.TrimStart('\\'));
 
-            if (serviceFromDB == null)
+            if (System.IO.File.Exists(oldImagePath))
             {
-                return NotFound();
+                System.IO.File.Delete(oldImagePath);
             }
-            return View(serviceFromDB);
-        }
 
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int? id)
-        {
-            Service? serviceobj = _unitOfWork.Service.Get(u => u.Id == id);
-            if (serviceobj == null)
-            {
-                return NotFound();
-
-            }
-            _unitOfWork.Service.Remove(serviceobj);
+            _unitOfWork.Service.Remove(serviceToBeDeleted);
             _unitOfWork.Save();
-            TempData["success"] = "Service deleted successful";
-            return RedirectToAction("Index");
+
+            return Json(new { success = true, message = "Delete Successful" });
         }
 
+        #endregion
+        //-------------------------------API END POINT-----------------------------------------------------------------//
         public class AddOnController : Controller
         {
             private readonly IUnityOfWork _unitOfWork;

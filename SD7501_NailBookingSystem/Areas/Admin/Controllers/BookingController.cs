@@ -2,6 +2,9 @@
 using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using SD7501_NailBookingSystem.Data;
 using SD7501_NailBookingSystem.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
+using SD7501_NailBookingSystem.Models.ViewModels;
 
 namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
 {
@@ -22,6 +25,88 @@ namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
             return View(objBookingList);
         }
 
+        ////Upsert
+        //public IActionResult Upsert(int? id)
+        //{
+        //    ServiceVM serviceVM = new()
+        //    {
+        //        ServiceList = _unitOfWork.Booking.GetAll().Select(u => new SelectListItem
+        //        {
+        //            Text = u.Name,
+        //            Value = u.Id.ToString()
+        //        }),
+        //        Service = new Service()
+        //    };
+
+        //    if (id == null || id == 0)
+        //    {
+        //        // Create
+        //        return View(serviceVM);
+        //    }
+        //    else
+        //    {
+        //        // Update
+        //        serviceVM.Service = _unitOfWork.Service.Get(u => u.Id == id);
+        //        return View(serviceVM);
+        //    }
+        //}
+
+
+        //[HttpPost] 
+        //public IActionResult Upsert(ServiceVM serviceVM, IFormFile? file)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        string wwwRootPath = _webHostEnvironment.WebRootPath;
+        //        if (file != null)
+        //        {
+        //            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); // Generates a unique file name
+        //            string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+        //            if (!string.IsNullOrEmpty(serviceVM.Service.ImageUrl))
+        //            {
+        //                //delete the old image by getting the path of that image
+        //                var oldImagePath = Path.Combine(wwwRootPath, serviceVM.Service.ImageUrl.Trim('\\'));
+
+        //                if (System.IO.File.Exists(oldImagePath))
+        //                {
+        //                    System.IO.File.Delete(oldImagePath);
+        //                }
+
+        //            }
+
+        //            using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+        //            {
+        //                file.CopyTo(fileStream);
+        //            }
+
+        //            serviceVM.Service.ImageUrl = @"\images\product\" + fileName;
+        //        }
+
+        //        if (serviceVM.Service.Id == 0)
+        //        {
+        //            _unitOfWork.Service.Add(serviceVM.Service);
+        //        }
+        //        else
+        //        {
+        //            _unitOfWork.Service.Update(serviceVM.Service);
+
+        //        }
+        //        _unitOfWork.Save();
+        //        TempData["success"] = "Service created successfully";
+        //        return RedirectToAction("Index");
+        //    }
+        //    else
+        //    {
+        //        serviceVM.BookingList = _unitOfWork.Booking.GetAll().Select(u => new SelectListItem
+        //        {
+        //            Text = u.Name,
+        //            Value = u.Id.ToString()
+        //        });
+
+        //        return View(serviceVM);
+        //    }
+        //}
 
         //Create
         public IActionResult Create()

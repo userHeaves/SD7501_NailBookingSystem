@@ -24,11 +24,11 @@ namespace SD7501_NailBookingSystem.Data
                 new Booking { Id = 3, Name = "Kelly", BookingOrder = 3 }
                 );
             modelBuilder.Entity<Service>().HasData(
-                new Service { Id = 1, Type = "Manicure Gel", Cost = 40 },
-                new Service { Id = 2, Type = "Pedicure Gel", Cost = 40 },
-                new Service { Id = 3, Type = "SNS", Cost = 55 },
-                new Service { Id = 4, Type = "Acrylic", Cost = 60 },
-                new Service { Id = 5, Type = "BIAB", Cost = 50 }
+                new Service { Id = 1, Type = "Manicure Gel", Cost = 40,Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.", BookingId = 1, ImageUrl = ""},
+                new Service { Id = 2, Type = "Pedicure Gel", Cost = 40,Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.", BookingId = 1, ImageUrl = "" },
+                new Service { Id = 3, Type = "SNS", Cost = 55,Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.", BookingId = 2, ImageUrl = "" },
+                new Service {Id = 4, Type = "Acrylic", Cost = 60,Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.", BookingId = 2, ImageUrl = "" },
+                new Service {Id = 5, Type = "BIAB", Cost = 50,Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.", BookingId = 3, ImageUrl = "" }
                 );
             modelBuilder.Entity<AddOn>().HasData(
                 new AddOn { Id = 1, Type = "French Tip", Cost = 8},

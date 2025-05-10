@@ -11,8 +11,8 @@ using SD7501_NailBookingSystem.Data;
 namespace SD7501_NailBookingSystem.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250508014543_AddBookingToDbAndSeedTable")]
-    partial class AddBookingToDbAndSeedTable
+    [Migration("20250510025839_AddBookingToDBandSeedTable")]
+    partial class AddBookingToDBandSeedTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,8 +113,19 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -122,39 +133,67 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookingId");
+
                     b.ToTable("Services");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
+                            BookingId = 1,
                             Cost = 40m,
+                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
+                            ImageUrl = "",
                             Type = "Manicure Gel"
                         },
                         new
                         {
                             Id = 2,
+                            BookingId = 1,
                             Cost = 40m,
+                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
+                            ImageUrl = "",
                             Type = "Pedicure Gel"
                         },
                         new
                         {
                             Id = 3,
+                            BookingId = 2,
                             Cost = 55m,
+                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
+                            ImageUrl = "",
                             Type = "SNS"
                         },
                         new
                         {
                             Id = 4,
+                            BookingId = 2,
                             Cost = 60m,
+                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
+                            ImageUrl = "",
                             Type = "Acrylic"
                         },
                         new
                         {
                             Id = 5,
+                            BookingId = 3,
                             Cost = 50m,
+                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
+                            ImageUrl = "",
                             Type = "BIAB"
                         });
+                });
+
+            modelBuilder.Entity("SD7501_NailBookingSystem.Models.Service", b =>
+                {
+                    b.HasOne("SD7501_NailBookingSystem.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
                 });
 #pragma warning restore 612, 618
         }
