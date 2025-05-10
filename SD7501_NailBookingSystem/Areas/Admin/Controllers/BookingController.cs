@@ -5,10 +5,13 @@ using SD7501_NailBookingSystem.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using SD7501_NailBookingSystem.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using SD7501_NailBookingSystem.Utilities;
 
 namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class BookingController : Controller
     {
         private readonly IUnityOfWork _unitOfWork;

@@ -2,16 +2,33 @@ using Microsoft.EntityFrameworkCore;
 using SD7501_NailBookingSystem.Data;
 using SD7501_NailBookingSystem.DataAccess.Repository;
 using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
+using SD7501_NailBookingSystem.Utilities;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(); //Controller views
 // Pass the connection string from appsettings.json to DbContext using dependency injection (DI)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+
+//Adding Razor Page views for identity framework
+builder.Services.AddRazorPages();
+
 //Adding scope - for DI
 builder.Services.AddScoped<IUnityOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 var app = builder.Build();
@@ -29,7 +46,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Identity DBcontext framework
+app.UseAuthentication();
 app.UseAuthorization();
+app.MapRazorPages(); //Razor Pages
 
 app.MapControllerRoute(
     name: "default",

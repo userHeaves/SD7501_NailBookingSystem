@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
 using SD7501_NailBookingSystem.Data;
@@ -6,10 +7,12 @@ using SD7501_NailBookingSystem.DataAccess.Repository;
 using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using SD7501_NailBookingSystem.Models;
 using SD7501_NailBookingSystem.Models.ViewModels;
+using SD7501_NailBookingSystem.Utilities;
 
 namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
 {
     [Area("Admin")] // Updated syntax for Area
+    [Authorize(Roles = SD.Role_Admin)]
     public class ServiceController : Controller
     {
         private readonly IUnityOfWork _unitOfWork;

@@ -12,7 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -24,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SD7501_NailBookingSystem.DataAccess\SD7501_NailBookingSystem.DataAccess.csproj" />
     <ProjectReference Include="..\SD7501_NailBookingSystem.Models\SD7501_NailBookingSystem.Models.csproj" />
+    <ProjectReference Include="..\SD7501_NailBookingSystem.Utilities\SD7501_NailBookingSystem.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
