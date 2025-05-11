@@ -8,11 +8,17 @@ using Microsoft.AspNetCore.Identity;
 using SD7501_NailBookingSystem.Utilities;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using SD7501_NailBookingSystem.Models;
+using Microsoft.Extensions.DependencyInjection;
+using SD7501_NailBookingSystem.ContactSupportService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Google credentials
 builder.Services.Configure<GoogleOAuthSettings>(builder.Configuration.GetSection("Authentication:Google"));
+
+//MailLink for Contact page
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<SD7501_NailBookingSystem.ContactSupportService.IEmailService, SD7501_NailBookingSystem.ContactSupportService.MailsService>();
 
 // Configure Google Authentication
 builder.Services.AddAuthentication(options =>
