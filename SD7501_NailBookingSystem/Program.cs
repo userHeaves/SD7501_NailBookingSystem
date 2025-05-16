@@ -13,9 +13,6 @@ using SD7501_NailBookingSystem.ContactSupportService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Google credentials
-builder.Services.Configure<GoogleOAuthSettings>(builder.Configuration.GetSection("Authentication:Google"));
-
 //MailLink for Contact page
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<SD7501_NailBookingSystem.ContactSupportService.IEmailService, SD7501_NailBookingSystem.ContactSupportService.MailsService>();
@@ -29,14 +26,8 @@ builder.Services.AddAuthentication(options =>
 .AddCookie()
 .AddGoogle(options =>
 {
-    // Access credentials from configuration (user secrets)
-    var googleOptions = builder.Configuration.GetSection("Authentication:Google").Get<GoogleOAuthSettings>();
-
-    options.ClientId = googleOptions.ClientId;
-    options.ClientSecret = googleOptions.ClientSecret;
-
-    // Optionally, configure callback path (if needed)
-    options.CallbackPath = "/signin-google";
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 });
 
 // Add services to the container.
