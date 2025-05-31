@@ -62,7 +62,7 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             ShoppingCartVM = new()
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
-                includeProperties: "Service, Service.Booking"),
+                includeProperties: "Service,Service.Booking"),
                 OrderHeader = new()
             };
 
