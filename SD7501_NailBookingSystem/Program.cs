@@ -10,12 +10,16 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using SD7501_NailBookingSystem.Models;
 using Microsoft.Extensions.DependencyInjection;
 using SD7501_NailBookingSystem.ContactSupportService;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //MailLink for Contact page
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<SD7501_NailBookingSystem.ContactSupportService.IEmailService, SD7501_NailBookingSystem.ContactSupportService.MailsService>();
+
+//Stripe
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 // Configure Google Authentication
 builder.Services.AddAuthentication(options =>
@@ -65,6 +69,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+//Stripes - middleware -- fetches secretkey and assign configuration
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
 app.UseRouting();
 

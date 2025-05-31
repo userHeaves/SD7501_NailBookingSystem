@@ -5,8 +5,9 @@ using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using SD7501_NailBookingSystem.Models;
 using SD7501_NailBookingSystem.Models.ViewModels;
 using SD7501_NailBookingSystem.Utilities;
+using Stripe;
+using Stripe.Checkout;
 using System.Security.Claims;
-
 namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
 {
     [Area("customer")]
@@ -104,52 +105,29 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
+            ShoppingCartVM.ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(
+                u => u.ApplicationUserId == userId,
+                includeProperties: "Service,Service.Booking");
 
-            ShoppingCartVM.ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
-            includeProperties: "Service,Service.Booking");
-
-            ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
+            ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
             ShoppingCartVM.OrderHeader.ApplicationUserId = userId;
 
             ApplicationUser applicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
 
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
-                if (cart.AddOns == true)
-                {
-                    // Logic when 'Yes' is selected
-                    cart.Price = GetPriceBasedOnQuantity(cart);
-                    cart.AddOnPrice = GetAddOnsPrice(cart);
-                    ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price + cart.AddOnPrice) * cart.Count;
-                }
-                else
-                {
-                    // Logic when 'No' is selected
-                    cart.Price = GetPriceBasedOnQuantity(cart);
-                    ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
-                }
-
+                cart.Price = GetPriceBasedOnQuantity(cart);
+                cart.AddOnPrice = cart.AddOns ? GetAddOnsPrice(cart) : 0;
+                ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price + cart.AddOnPrice) * cart.Count;
             }
 
             ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
             ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
 
-            //if (applicationUser.CompanyId.GetValueOrDefault() == 0)
-            //{
-            //    //it is a regular customer 
-            //    ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
-            //    ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
-            //}
-            //else
-            //{
-            //    //it is a company user
-            //    ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusDelayedPayment;
-            //    ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusApproved;
-            //}
-
             _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
             _unitOfWork.Save();
 
+            // Save OrderDetails
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
                 OrderDetail orderDetail = new()
@@ -160,13 +138,50 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
                     AddOnPrice = cart.AddOnPrice,
                     Count = cart.Count
                 };
-
                 _unitOfWork.OrderDetail.Add(orderDetail);
-                _unitOfWork.Save();
             }
 
-            return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartVM.OrderHeader.Id });
+            _unitOfWork.Save(); 
 
+            // Stripe payment session creation
+            var domain = "https://localhost:7051/";
+            var options = new SessionCreateOptions
+            {
+                SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
+                CancelUrl = domain + "customer/cart/index",
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment"
+            };
+
+            foreach (var item in ShoppingCartVM.ShoppingCartList)
+            {
+                options.LineItems.Add(new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)((item.Price + item.AddOnPrice) * 100),
+                        Currency = "nzd",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.Service.Type
+                        }
+                    },
+                    Quantity = item.Count
+                });
+            }
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            _unitOfWork.OrderHeader.UpdateStripePaymentID(
+                ShoppingCartVM.OrderHeader.Id,
+                session.Id,
+                session.PaymentIntentId
+            );
+            _unitOfWork.Save();
+
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
         }
 
         public IActionResult OrderConfirmation(int id)
