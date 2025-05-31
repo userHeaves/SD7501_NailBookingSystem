@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SD7501_NailBookingSystem.DataAccess.Repository;
 using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using SD7501_NailBookingSystem.Models;
 using SD7501_NailBookingSystem.Models.ViewModels;
+using SD7501_NailBookingSystem.Utilities;
 using System.Security.Claims;
 
 namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
@@ -94,6 +96,84 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             }
             return View(ShoppingCartVM);
         }
+
+        [HttpPost]
+        [ActionName("Summary")]
+        public IActionResult SummaryPOST()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+
+            ShoppingCartVM.ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
+            includeProperties: "Service,Service.Booking");
+
+            ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
+            ShoppingCartVM.OrderHeader.ApplicationUserId = userId;
+
+            ApplicationUser applicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                if (cart.AddOns == true)
+                {
+                    // Logic when 'Yes' is selected
+                    cart.Price = GetPriceBasedOnQuantity(cart);
+                    cart.AddOnPrice = GetAddOnsPrice(cart);
+                    ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price + cart.AddOnPrice) * cart.Count;
+                }
+                else
+                {
+                    // Logic when 'No' is selected
+                    cart.Price = GetPriceBasedOnQuantity(cart);
+                    ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
+                }
+
+            }
+
+            ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+            ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
+
+            //if (applicationUser.CompanyId.GetValueOrDefault() == 0)
+            //{
+            //    //it is a regular customer 
+            //    ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+            //    ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
+            //}
+            //else
+            //{
+            //    //it is a company user
+            //    ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusDelayedPayment;
+            //    ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusApproved;
+            //}
+
+            _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
+            _unitOfWork.Save();
+
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                OrderDetail orderDetail = new()
+                {
+                    ServiceId = cart.ServiceId,
+                    OrderHeaderId = ShoppingCartVM.OrderHeader.Id,
+                    Price = cart.Price,
+                    AddOnPrice = cart.AddOnPrice,
+                    Count = cart.Count
+                };
+
+                _unitOfWork.OrderDetail.Add(orderDetail);
+                _unitOfWork.Save();
+            }
+
+            return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartVM.OrderHeader.Id });
+
+        }
+
+        public IActionResult OrderConfirmation(int id)
+        {
+            return View(id);
+        }
+
 
         public IActionResult Plus(int cartId)
         {
