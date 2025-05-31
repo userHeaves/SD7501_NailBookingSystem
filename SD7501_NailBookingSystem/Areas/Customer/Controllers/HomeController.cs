@@ -54,6 +54,11 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
 
             ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId &&
                                                                          u.ServiceId == shoppingCart.ServiceId);
+            // Enforce 1 count per service type
+            if (shoppingCart.Count < 1)
+            {
+                shoppingCart.Count = 1;
+            }
 
             if (cartFromDb != null)
             {
@@ -62,7 +67,7 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
                 {
                     //When AddOns Feature is True
                     cartFromDb.AddOns = shoppingCart.AddOns;
-                    cartFromDb.Count += shoppingCart.Count;
+                    cartFromDb.Count = shoppingCart.Count;
                     _unitOfWork.ShoppingCart.Update(cartFromDb);
                     _unitOfWork.Save();
                 }
@@ -70,7 +75,7 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
                 else
                 {
                     //When AddOns Feature is False
-                    cartFromDb.Count += shoppingCart.Count;
+                    cartFromDb.Count = shoppingCart.Count;
                     _unitOfWork.ShoppingCart.Update(cartFromDb);
                     _unitOfWork.Save();
 

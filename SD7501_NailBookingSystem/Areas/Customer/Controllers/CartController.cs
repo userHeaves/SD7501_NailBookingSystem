@@ -49,8 +49,7 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
                     cart.Price = GetPriceBasedOnQuantity(cart);
                     ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
                 }
-                //cart.Price = GetPriceBasedOnQuantity(cart);
-                //ShoppingCartVM.OrderTotal += (cart.Price * cart.Count);
+
             }
 
             return View(ShoppingCartVM);
@@ -63,7 +62,7 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             ShoppingCartVM = new()
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
-                includeProperties: "Service"),
+                includeProperties: "Service, Service.Booking"),
                 OrderHeader = new()
             };
 
@@ -138,38 +137,12 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             }
 
             return (double)shoppingCart.Service.Booking.BookingOrder;
-
-            //if (shoppingCart.Count <= 50)
-            //{
-            //    return shoppingCart.Service.Price;
-            //}
-            //else if (shoppingCart.Count <= 100)
-            //{
-            //    return shoppingCart.Service.Price50;
-            //}
-            //else
-            //{
-            //    return shoppingCart.Service.Price100;
-            //}
         }
 
 
         private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)
         {
             return (double)shoppingCart.Service.Cost;
-
-            //if (shoppingCart.Count <= 50)
-            //{
-            //    return shoppingCart.Service.Price;
-            //}
-            //else if (shoppingCart.Count <= 100)
-            //{
-            //    return shoppingCart.Service.Price50;
-            //}
-            //else
-            //{
-            //    return shoppingCart.Service.Price100;
-            //}
         }
     }
 }
