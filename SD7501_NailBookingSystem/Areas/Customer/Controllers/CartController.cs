@@ -30,7 +30,8 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(
                     u => u.ApplicationUserId == userId,
-                    includeProperties: "Service,Service.Booking")
+                    includeProperties: "Service,Service.Booking"),
+                OrderHeader = new()
             };
 
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
@@ -40,13 +41,13 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
                     // Logic when 'Yes' is selected
                     cart.Price = GetPriceBasedOnQuantity(cart);
                     cart.AddOnPrice = GetAddOnsPrice(cart);
-                    ShoppingCartVM.OrderTotal += (cart.Price + cart.AddOnPrice) * cart.Count;
+                    ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price + cart.AddOnPrice) * cart.Count;
                 }
                 else
                 {
                     // Logic when 'No' is selected
                     cart.Price = GetPriceBasedOnQuantity(cart);
-                    ShoppingCartVM.OrderTotal += (cart.Price * cart.Count);
+                    ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
                 }
                 //cart.Price = GetPriceBasedOnQuantity(cart);
                 //ShoppingCartVM.OrderTotal += (cart.Price * cart.Count);
@@ -56,7 +57,43 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
         }
         public IActionResult Summary()
         {
-            return View();
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCartVM = new()
+            {
+                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
+                includeProperties: "Service"),
+                OrderHeader = new()
+            };
+
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+
+            ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.Name;
+            ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
+            ShoppingCartVM.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.ApplicationUser.StreetAddress;
+            ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.ApplicationUser.City;
+            ShoppingCartVM.OrderHeader.State = ShoppingCartVM.OrderHeader.ApplicationUser.State;
+            ShoppingCartVM.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.ApplicationUser.PostalCode;
+
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                if (cart.AddOns == true)
+                {
+                    // Logic when 'Yes' is selected
+                    cart.Price = GetPriceBasedOnQuantity(cart);
+                    cart.AddOnPrice = GetAddOnsPrice(cart);
+                    ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price + cart.AddOnPrice) * cart.Count;
+                }
+                else
+                {
+                    // Logic when 'No' is selected
+                    cart.Price = GetPriceBasedOnQuantity(cart);
+                    ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
+                }
+
+            }
+            return View(ShoppingCartVM);
         }
 
         public IActionResult Plus(int cartId)
@@ -95,6 +132,11 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
 
         private double GetAddOnsPrice(ShoppingCart shoppingCart)
         {
+            if (shoppingCart.Service.Booking == null)
+            {
+                return 0; // or a default value you want to use when Booking is not set
+            }
+
             return (double)shoppingCart.Service.Booking.BookingOrder;
 
             //if (shoppingCart.Count <= 50)

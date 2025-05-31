@@ -12,6 +12,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Repository.IRepository
         IServiceRepository Service { get; }
         IShoppingCartRespository ShoppingCart { get; }
         IApplicationUserRepository ApplicationUser { get; }
+        IOrderHeaderRepository OrderHeader { get; }
+        IOrderDetailRepository OrderDetail { get; }
         //IAddOnRepository AddOn { get; }
         void Save();
 

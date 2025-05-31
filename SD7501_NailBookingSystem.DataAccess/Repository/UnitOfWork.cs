@@ -15,6 +15,9 @@ namespace SD7501_NailBookingSystem.DataAccess.Repository
         public IServiceRepository Service { get; private set; }
         public IShoppingCartRespository ShoppingCart { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
+        public IOrderHeaderRepository OrderHeader { get; private set; }
+        public IOrderDetailRepository OrderDetail { get; private set; }
+
         //public IAddOnRepository AddOn { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
@@ -24,6 +27,9 @@ namespace SD7501_NailBookingSystem.DataAccess.Repository
             Service = new ServiceRepository(_db);
             ShoppingCart = new ShoppingCartRespository(_db);
             ApplicationUser = new ApplicationUserRespository(_db);
+            OrderHeader = new OrderHeaderRepository(_db);
+            OrderDetail = new OrderDetailRepository(_db);
+
             //AddOn = new AddOnRepository(_db);
 
         }
