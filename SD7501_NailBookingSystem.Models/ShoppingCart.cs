@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace SD7501_NailBookingSystem.Models
 {
@@ -21,6 +22,11 @@ namespace SD7501_NailBookingSystem.Models
 
         [Range(1, 1000, ErrorMessage = "Please enter a value between 1 and 1000")]
         public int Count { get; set; }
+
+        public bool AddOns { get; set; } 
+
+        [NotMapped]
+        public double AddOnPrice { get; set; }
 
         public string ApplicationUserId { get; set; }
 

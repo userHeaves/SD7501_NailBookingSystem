@@ -30,13 +30,26 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(
                     u => u.ApplicationUserId == userId,
-                    includeProperties: "Service")
+                    includeProperties: "Service,Service.Booking")
             };
 
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
-                cart.Price = GetPriceBasedOnQuantity(cart);
-                ShoppingCartVM.OrderTotal += (cart.Price * cart.Count);
+                if (cart.AddOns == true)
+                {
+                    // Logic when 'Yes' is selected
+                    cart.Price = GetPriceBasedOnQuantity(cart);
+                    cart.AddOnPrice = GetAddOnsPrice(cart);
+                    ShoppingCartVM.OrderTotal += (cart.Price + cart.AddOnPrice) * cart.Count;
+                }
+                else
+                {
+                    // Logic when 'No' is selected
+                    cart.Price = GetPriceBasedOnQuantity(cart);
+                    ShoppingCartVM.OrderTotal += (cart.Price * cart.Count);
+                }
+                //cart.Price = GetPriceBasedOnQuantity(cart);
+                //ShoppingCartVM.OrderTotal += (cart.Price * cart.Count);
             }
 
             return View(ShoppingCartVM);
@@ -80,6 +93,23 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        private double GetAddOnsPrice(ShoppingCart shoppingCart)
+        {
+            return (double)shoppingCart.Service.Booking.BookingOrder;
+
+            //if (shoppingCart.Count <= 50)
+            //{
+            //    return shoppingCart.Service.Price;
+            //}
+            //else if (shoppingCart.Count <= 100)
+            //{
+            //    return shoppingCart.Service.Price50;
+            //}
+            //else
+            //{
+            //    return shoppingCart.Service.Price100;
+            //}
+        }
 
 
         private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)

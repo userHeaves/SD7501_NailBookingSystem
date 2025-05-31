@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using SD7501_NailBookingSystem.Models;
 
@@ -32,7 +33,9 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             {
                 Service = _unitOfWork.Service.Get(u => u.Id == serviceId, includeProperties: "Booking"),
                 Count = 1,
-                ServiceId = serviceId
+                ServiceId = serviceId,
+                AddOns = false,
+                AddOnPrice = 0
             };
             return View(cart);
 
@@ -54,21 +57,36 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
 
             if (cartFromDb != null)
             {
-                // shopping cart exists
-                cartFromDb.Count += shoppingCart.Count;
-                _unitOfWork.ShoppingCart.Update(cartFromDb);
-                _unitOfWork.Save();
+
+                if (shoppingCart.AddOns == true)
+                {
+                    //When AddOns Feature is True
+                    cartFromDb.AddOns = shoppingCart.AddOns;
+                    cartFromDb.Count += shoppingCart.Count;
+                    _unitOfWork.ShoppingCart.Update(cartFromDb);
+                    _unitOfWork.Save();
+                }
+
+                else
+                {
+                    //When AddOns Feature is False
+                    cartFromDb.Count += shoppingCart.Count;
+                    _unitOfWork.ShoppingCart.Update(cartFromDb);
+                    _unitOfWork.Save();
+
+                }
             }
-            else
+            else 
             {
-                // add cart record
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
                 _unitOfWork.Save();
-            }
-            TempData["success"] = "Cart updated successfully";
 
+            }
+
+            TempData["success"] = "Cart updated successfully";
             return RedirectToAction(nameof(Index));
         }
+        
 
         public IActionResult Privacy()
         {

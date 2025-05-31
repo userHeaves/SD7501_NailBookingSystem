@@ -237,8 +237,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookingOrder")
-                        .HasColumnType("int");
+                    b.Property<double>("BookingOrder")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -253,20 +253,20 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            BookingOrder = 1,
-                            Name = "Alice"
+                            BookingOrder = 8.0,
+                            Name = "French Tip"
                         },
                         new
                         {
                             Id = 2,
-                            BookingOrder = 2,
-                            Name = "Jasmine"
+                            BookingOrder = 8.0,
+                            Name = "Nail Art"
                         },
                         new
                         {
                             Id = 3,
-                            BookingOrder = 3,
-                            Name = "Kelly"
+                            BookingOrder = 8.0,
+                            Name = "Sticker and Gems"
                         });
                 });
 
@@ -308,8 +308,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 1,
                             BookingId = 1,
                             Cost = 40m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "Our Manicure Gel starts with shaping your nails and applying a base coat, followed by layers of gel polish cured under a UV lamp. It finishes with a glossy top coat, leaving you with beautiful, chip-free nails that last for weeks!",
+                            ImageUrl = "ManicureGel.jpg",
                             Type = "Manicure Gel"
                         },
                         new
@@ -317,8 +317,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 2,
                             BookingId = 1,
                             Cost = 40m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "Our Pedicure Gel includes a relaxing foot soak, nail shaping, and cuticle care, followed by gel polish cured under a UV lamp. The result is smooth, vibrant toes with a long-lasting, high-shine finish!",
+                            ImageUrl = "PedicureGel.jpg",
                             Type = "Pedicure Gel"
                         },
                         new
@@ -326,8 +326,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 3,
                             BookingId = 2,
                             Cost = 55m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "Our SNS treatment begins with shaping your nails and applying a bonding base, then dipping them into vitamin-rich powder for strength and color. It finishes with a glossy seal—no UV light needed—for a lightweight, durable look.",
+                            ImageUrl = "SNS.jpg",
                             Type = "SNS"
                         },
                         new
@@ -335,8 +335,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 4,
                             BookingId = 2,
                             Cost = 60m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "Our Acrylic service starts by applying a liquid and powder mix to your natural nails or extensions, creating a strong, sculpted shape. It's then buffed and polished for a durable, long-lasting finish perfect for any style.",
+                            ImageUrl = "Acrylic.jpg",
                             Type = "Acrylic"
                         },
                         new
@@ -344,8 +344,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 5,
                             BookingId = 3,
                             Cost = 50m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "BIAB (Builder in a Bottle) is a strengthening gel applied like polish but acts like acrylic, perfect for growing and protecting natural nails. It's finished with a glossy top coat for a natural, long-lasting look.",
+                            ImageUrl = "BIAB.jpg",
                             Type = "BIAB"
                         });
                 });
@@ -357,6 +357,9 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AddOns")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()

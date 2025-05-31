@@ -9,11 +9,11 @@ namespace SD7501_NailBookingSystem.Models
         public int Id { get; set; }
         [Required]
         [MaxLength(100)]
-        [DisplayName("Booking Name")]
+        [DisplayName("Add On Name")]
         public string Name { get; set; }
         [Range(1, 100)]
-        [DisplayName("Booking Order")]
-        public int BookingOrder { get; set; }
+        [DisplayName("Add On price")]
+        public double BookingOrder { get; set; }
 
     }
 }

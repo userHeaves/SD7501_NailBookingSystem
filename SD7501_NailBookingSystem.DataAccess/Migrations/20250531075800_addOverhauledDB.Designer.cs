@@ -12,8 +12,8 @@ using SD7501_NailBookingSystem.Data;
 namespace SD7501_NailBookingSystem.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250510110609_UpdateNameToBeStringApplicationUser")]
-    partial class UpdateNameToBeStringApplicationUser
+    [Migration("20250531075800_addOverhauledDB")]
+    partial class addOverhauledDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -232,46 +232,6 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SD7501_NailBookingSystem.Models.AddOn", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AddOns");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Cost = 8m,
-                            Type = "French Tip"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Cost = 8m,
-                            Type = "Nail Art"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Cost = 8m,
-                            Type = "Sticker and Gems"
-                        });
-                });
-
             modelBuilder.Entity("SD7501_NailBookingSystem.Models.Booking", b =>
                 {
                     b.Property<int>("Id")
@@ -280,8 +240,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookingOrder")
-                        .HasColumnType("int");
+                    b.Property<double>("BookingOrder")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -296,20 +256,20 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            BookingOrder = 1,
-                            Name = "Alice"
+                            BookingOrder = 8.0,
+                            Name = "French Tip"
                         },
                         new
                         {
                             Id = 2,
-                            BookingOrder = 2,
-                            Name = "Jasmine"
+                            BookingOrder = 8.0,
+                            Name = "Nail Art"
                         },
                         new
                         {
                             Id = 3,
-                            BookingOrder = 3,
-                            Name = "Kelly"
+                            BookingOrder = 8.0,
+                            Name = "Sticker and Gems"
                         });
                 });
 
@@ -351,8 +311,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 1,
                             BookingId = 1,
                             Cost = 40m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "Our Manicure Gel starts with shaping your nails and applying a base coat, followed by layers of gel polish cured under a UV lamp. It finishes with a glossy top coat, leaving you with beautiful, chip-free nails that last for weeks!",
+                            ImageUrl = "ManicureGel.jpg",
                             Type = "Manicure Gel"
                         },
                         new
@@ -360,8 +320,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 2,
                             BookingId = 1,
                             Cost = 40m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "Our Pedicure Gel includes a relaxing foot soak, nail shaping, and cuticle care, followed by gel polish cured under a UV lamp. The result is smooth, vibrant toes with a long-lasting, high-shine finish!",
+                            ImageUrl = "PedicureGel.jpg",
                             Type = "Pedicure Gel"
                         },
                         new
@@ -369,8 +329,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 3,
                             BookingId = 2,
                             Cost = 55m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "Our SNS treatment begins with shaping your nails and applying a bonding base, then dipping them into vitamin-rich powder for strength and color. It finishes with a glossy seal—no UV light needed—for a lightweight, durable look.",
+                            ImageUrl = "SNS.jpg",
                             Type = "SNS"
                         },
                         new
@@ -378,8 +338,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 4,
                             BookingId = 2,
                             Cost = 60m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "Our Acrylic service starts by applying a liquid and powder mix to your natural nails or extensions, creating a strong, sculpted shape. It's then buffed and polished for a durable, long-lasting finish perfect for any style.",
+                            ImageUrl = "Acrylic.jpg",
                             Type = "Acrylic"
                         },
                         new
@@ -387,10 +347,40 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                             Id = 5,
                             BookingId = 3,
                             Cost = 50m,
-                            Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac.",
-                            ImageUrl = "",
+                            Description = "BIAB (Builder in a Bottle) is a strengthening gel applied like polish but acts like acrylic, perfect for growing and protecting natural nails. It's finished with a glossy top coat for a natural, long-lasting look.",
+                            ImageUrl = "BIAB.jpg",
                             Type = "BIAB"
                         });
+                });
+
+            modelBuilder.Entity("SD7501_NailBookingSystem.Models.ShoppingCart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AddOns")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ShoppingCarts");
                 });
 
             modelBuilder.Entity("SD7501_NailBookingSystem.Models.ApplicationUser", b =>
@@ -476,6 +466,25 @@ namespace SD7501_NailBookingSystem.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Booking");
+                });
+
+            modelBuilder.Entity("SD7501_NailBookingSystem.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("SD7501_NailBookingSystem.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SD7501_NailBookingSystem.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Service");
                 });
 #pragma warning restore 612, 618
         }
