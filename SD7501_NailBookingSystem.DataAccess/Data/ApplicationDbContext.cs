@@ -15,6 +15,7 @@ namespace SD7501_NailBookingSystem.Data
         public DbSet<Service> Services { get; set; }
         //public DbSet<AddOn> AddOns { get; set; }
 
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
