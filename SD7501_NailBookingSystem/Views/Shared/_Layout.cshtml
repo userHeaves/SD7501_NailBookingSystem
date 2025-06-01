@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -49,7 +52,7 @@
                                     Content Management
                                 </a>
                                 <ul class="dropdown-menu">
-@*                                     <li class="nav-item">
+                                    @*                                     <li class="nav-item">
                                         <a class="dropdown-item text-dark" asp-area="Admin" asp-controller="Booking" asp-action="Index">Bookings</a>
                                     </li> *@
                                     <li>
@@ -61,12 +64,14 @@
                         }
                         @* Drop down menu ends here *@
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
-                                <i class="bi bi-cart"></i>&nbsp;(0)
-                            </a>
-                        </li>
-
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart) !=null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                    @await Component.InvokeAsync("ShoppingCart")
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_Loginpartial"/>
                 </div>

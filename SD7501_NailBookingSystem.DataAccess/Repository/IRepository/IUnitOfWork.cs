@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SD7501_NailBookingSystem.DataAccess.Repository.IRepository
 {
-    public interface IUnityOfWork
+    public interface IUnitOfWork
     {
         IBookingRepository Booking { get; }
         IServiceRepository Service { get; }

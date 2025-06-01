@@ -16,12 +16,12 @@ namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
     public class OrderController : Controller
     {
 
-        private readonly IUnityOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         [BindProperty]
         public OrderVM OrderVM { get; set; }
 
-        public OrderController(IUnityOfWork unitOfWork)
+        public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

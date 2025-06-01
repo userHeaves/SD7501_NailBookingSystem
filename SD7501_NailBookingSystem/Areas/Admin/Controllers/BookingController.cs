@@ -14,10 +14,10 @@ namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
     [Authorize(Roles = SD.Role_Admin)]
     public class BookingController : Controller
     {
-        private readonly IUnityOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         //Main View
-        public BookingController(IUnityOfWork unityOfWork)
+        public BookingController(IUnitOfWork unityOfWork)
         {
             _unitOfWork = unityOfWork;
 

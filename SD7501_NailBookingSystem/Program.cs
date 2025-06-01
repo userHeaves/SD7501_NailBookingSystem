@@ -49,11 +49,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 //Adding Razor Page views for identity framework
 builder.Services.AddRazorPages();
 
 //Adding scope - for DI
-builder.Services.AddScoped<IUnityOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
@@ -78,8 +86,8 @@ app.UseRouting();
 // Identity DBcontext framework
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 app.MapRazorPages(); //Razor Pages
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");

@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using SD7501_NailBookingSystem.DataAccess.Repository.IRepository;
 using SD7501_NailBookingSystem.Models;
+using SD7501_NailBookingSystem.Utilities;
 
 namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
 {
@@ -13,9 +14,9 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IUnityOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger, IUnityOfWork unitOfWork)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -86,6 +87,7 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
                 _unitOfWork.Save();
 
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId).Count());
             }
 
             TempData["success"] = "Cart updated successfully";

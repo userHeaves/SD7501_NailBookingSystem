@@ -15,10 +15,10 @@ namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
     [Authorize(Roles = SD.Role_Admin)]
     public class ServiceController : Controller
     {
-        private readonly IUnityOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ServiceController(IUnityOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        public ServiceController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _webHostEnvironment = webHostEnvironment;
