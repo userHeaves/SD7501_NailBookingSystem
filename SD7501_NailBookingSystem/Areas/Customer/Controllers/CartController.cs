@@ -141,10 +141,12 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
                 _unitOfWork.OrderDetail.Add(orderDetail);
             }
 
-            _unitOfWork.Save(); 
+            _unitOfWork.Save();
 
             // Stripe payment session creation
-            var domain = "https://localhost:7237/";
+            //var domain = "https://localhost:7237/";
+
+            var domain = Request.Scheme + "://" + Request.Host.Value + "/";
             var options = new SessionCreateOptions
             {
                 SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
