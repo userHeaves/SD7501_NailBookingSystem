@@ -99,7 +99,7 @@ namespace SD7501_NailBookingSystem.Areas.Admin.Controllers
 
             _unitOfWork.OrderHeader.Update(orderHeader);
             _unitOfWork.Save();
-            TempData["success"] = "Order Shipped Successfully.";
+            TempData["success"] = "Booking Completed";
 
             return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
         }
