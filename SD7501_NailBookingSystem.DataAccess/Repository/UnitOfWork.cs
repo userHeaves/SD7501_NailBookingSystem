@@ -26,6 +26,8 @@ namespace SD7501_NailBookingSystem.DataAccess.Repository
             Service = new ServiceRepository(_db);
             ShoppingCart = new ShoppingCartRespository(_db);
             ApplicationUser = new ApplicationUserRespository(_db);
+            OrderHeader = new OrderHeaderRepository(_db);
+            OrderDetail = new OrderDetailRepository(_db);
             //AddOn = new AddOnRepository(_db);
 
         }

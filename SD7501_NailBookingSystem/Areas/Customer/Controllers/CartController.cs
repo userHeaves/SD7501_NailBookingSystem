@@ -33,7 +33,7 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(
                     u => u.ApplicationUserId == userId,
-                    includeProperties: "Service,Service.Booking"),
+                    includeProperties: "Service.Booking"),
                 OrderHeader = new()
             };
 
@@ -65,7 +65,7 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
             ShoppingCartVM = new()
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId,
-                includeProperties: "Service, Service.Booking"),
+                includeProperties: "Service.Booking"),
                 OrderHeader = new()
             };
 
@@ -107,7 +107,7 @@ namespace SD7501_NailBookingSystem.Areas.Customer.Controllers
 
             ShoppingCartVM.ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(
                 u => u.ApplicationUserId == userId,
-                includeProperties: "Service,Service.Booking");
+                includeProperties: "Service.Booking");
 
             ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
             ShoppingCartVM.OrderHeader.ApplicationUserId = userId;
